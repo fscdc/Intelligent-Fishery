@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <!-- 引入图标样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/simple-line-icons@2.5.5/css/simple-line-icons.css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="{% static 'css/components.chunk.css' %}">
+    <link rel="stylesheet" href="{% static 'css/umi.css' %}">
+    <script src="{% static 'js/custom.js' %}"></script>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta name="theme-color" content="#343a40">
+
+    <title>海洋牧场监测可视化系统</title>
+<style>
+    /* .block {
+        max-width: 1145px;
+        margin: 20px auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .block-header {
+        background-color: #f5f5f5;
+        padding: 10px 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .block-title {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .block-content {
+        padding: 15px;
+    } */
+
+    #chat-container {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    #chat-box {
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+        border-bottom: 1px solid #ddd;
+        overflow: hidden;
+    }
+
+    #chat-log {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+    }
+
+    .chat-input-container {
+        display: flex;
+        border-top: 1px solid #ddd;
+    }
+
+    #chat-input {
+        flex-grow: 1;
+        padding: 10px;
+        border: none;
+        border-right: 1px solid #ddd;
+    }
+
+    #send-button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    #send-button:hover {
+        background-color: #0056b3;
+    }
+
+    .user-message, .ai-message {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .user-message {
+        background-color: #dcf8c6;
+        align-self: flex-end;
+    }
+
+    .ai-message {
+        background-color: #f1f1f1;
+        align-self: flex-start;
+    }
+
+    #default-questions {
+        margin-top: 20px;
+    }
+
+    .btn-primarys {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        padding: 10px 15px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+</head>
+
+<body>
+    <div id="root">
+        <div id="page-container" class="null sidebar-o sidebar-dark page-header-dark side-scroll page-header-fixed main-content-boxed side-trans-enabled false">
+            <div class="v2board-nav-mask" style="display: none;"></div>
+            <nav id="sidebar">
+                <div class="smini-hidden bg-header-dark">
+                    <div class="content-header justify-content-lg-center bg-white-10"><a class="font-size-lg text-white" href="/fishery/homepage/"><span class="text-white-75">海洋牧场</span></a>
+                        <div class="d-lg-none"><a class="text-white ml-2" data-toggle="layout" data-action="sidebar_close" href="javascript:void(0);"><i class="fa fa-times-circle"></i></a></div>
+                    </div>
+                </div>
+                <div class="content-side content-side-full">
+                    <ul class="nav-main">
+                        <li class="nav-main-heading">欢迎光临</li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/homepage/"><i
+                                    class="nav-main-link-icon si si-book-open"></i><span
+                                    class="nav-main-link-name">主页</span></a></li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/main_info/"><i
+                                    class="nav-main-link-icon si si-book-open"></i><span
+                                    class="nav-main-link-name">主要信息</span></a></li>
+                        {% if user_info.role == 'fisher' or user_info.role == 'general_user' %}
+                        <li class="nav-main-heading">功能</li>
+                        {% endif %}
+                        {% if user_info.role == 'fisher' %}
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/underwater_system/"><i
+                            class="nav-main-link-icon si si-question"></i><span
+                            class="nav-main-link-name">水下系统</span></a></li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/data_center/"><i
+                                    class="nav-main-link-icon si si-question"></i><span
+                                    class="nav-main-link-name">数据中心</span></a></li>
+                        {% endif %}
+                        {% if user_info.role == 'fisher' or user_info.role == 'general_user' %}
+                        <li class="nav-main-item"><a class="nav-main-link active" href="/fishery/intelligence_center/"><i
+                                    class="nav-main-link-icon si si-question"></i><span
+                                    class="nav-main-link-name">智能中心</span></a></li>
+                        {% endif %}
+                        {% if user_info.role == 'admin' %}
+                        <li class="nav-main-heading">管理员管理</li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/admin_management/"><i
+                                    class="nav-main-link-icon si si-book-open"></i><span
+                                    class="nav-main-link-name">管理中心</span></a></li>
+                        {% endif %}
+                        <li class="nav-main-heading">用户</li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/user/"><i
+                                    class="nav-main-link-icon si si-users"></i><span
+                                    class="nav-main-link-name">用户中心</span></a></li>
+                        <li class="nav-main-heading">关于</li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/illustration/"><i
+                            class="nav-main-link-icon si si-book-open"></i><span
+                            class="nav-main-link-name">说明</span></a></li>
+                    </ul>
+                </div>
+                <div class="v2board-copyright">海洋牧场监测可视化系统 v1.0.0</div>
+            </nav>
+            <header id="page-header">
+                <div class="content-header">
+                    <div class="sidebar-toggle" style="display: none;"><button type="button" class="btn btn-primary mr-1 d-lg-none"><i class="fa fa-fw fa-bars"></i></button></div>
+                    <div class="v2board-container-title text-white">说明</div>
+                    <div>
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn btn-primary dropdown-button">
+                                <i class="far fa fa-user-circle"></i>
+                                <span class="d-none d-lg-inline ml-1">{{ user_info.username }}</span>
+                                <i class="fa fa-fw fa-angle-down ml-1"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right p-0 false">
+                                <div class="p-2">
+                                    <a class="dropdown-item" href="/fishery/user/">
+                                        <i class="far fa-fw fa-user mr-1"></i> 个人中心
+                                    </a>
+                                    <a class="dropdown-item" href="/fishery/login/">
+                                        <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> 登出
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main id="main-container">
+                <div class="content content-full">
+                    <!-- Predictive Maintenance -->
+                    <div class="block block-rounded js-appear-enabled">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">设备维护</h3>
+                        </div>
+                        <div class="block-content">
+                            <p></p>
+                            <button class="btn btn-primary" onclick="startDeviceDiagnostic()">启动设备诊断</button>
+                            <p></p>
+                            <div id="progress-bar" style="display: none;">
+                                <div id="progress" class="progress bg-success"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function startDeviceDiagnostic() {
+                            var progressBar = document.getElementById("progress-bar");
+                            var progress = document.getElementById("progress");
+
+                            progressBar.style.display = "block";
+                            progress.style.width = "0%";
+
+                            var interval = setInterval(function() {
+                                var width = parseInt(progress.style.width);
+                                if (width >= 100) {
+                                    clearInterval(interval);
+                                    progressBar.style.display = "none";
+                                    showCompletionNotification();
+                                } else {
+                                    width += 10;
+                                    progress.style.width = width + "%";
+                                }
+                            }, 500);
+                        }
+
+                        function showCompletionNotification() {
+                            // Code to show a notification box with the completion message
+                            // Replace the following line with your own implementation
+                            alert("设备已经全部检测完毕，无问题出现");
+                        }
+                    </script>
+                <div class="block block-rounded js-appear-enabled">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">AI分析</h3>
+                    </div>
+                    <div class="block-content">
+                        <div id="chat-container">
+                            <div id="chat-box">
+                                <div id="chat-log"></div>
+                                <div class="chat-input-container">
+                                    <input type="text" id="chat-input" placeholder="输入消息..." class="chat-input-left">
+                                    <button id="send-button" class="send-button-right">发送</button>
+                                </div>
+                            </div>
+                        </div>
+                        <p></p>
+                        <div id="default-questions">
+                            <h4>常见问题：</h4>
+                            <div class="btn btn-primarys">
+                                <button class="btn btn-primary" onclick="askQuestion(0)">帮我介绍一下本系统,都如何使用呢</button>
+                                <button class="btn btn-primary" onclick="askQuestion(1)">如何进行环境影响分析</button>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                </div>
+                <script>
+                    // Default questions and answers
+                    var defaultQuestions = [
+                        {
+                            question: "帮我介绍一下本系统,都如何使用呢",
+                            answer: "对于系统登录，需要打开系统登录界面，输入用户名和密码进行登录。在初次使用时需进行用户注册，根据提示填写相关信息；登录后进入主界面，可以看到当前渔场的环境参数实时数据。数据以图表和数值形式展示，便于用户快速了解当前环境状况。在“数据分析”模块，可以查看历史数据的趋势图表。选择时间范围和参数类型，系统会生成相应的分析报告。预测功能可以帮助管理人员预估未来一段时间内的环境变化情况。同时，系统会根据预设的阈值进行监控，当参数超出安全范围时，自动触发报警。用户可以在“报警设置”模块中设置报警阈值和通知方式（短信、邮件等）。收到报警通知后，及时查看报警详情并采取相应措施。在用户管理方面，管理员可以在“用户管理”模块中添加、删除和修改用户信息，或者设置不同用户的权限，确保系统操作的安全性和有效性。同时，实现智能对话模块，用户可以咨询有关系统操作、渔场管理等方面的问题，助手会给出相应的解答。"
+                        },
+                        {
+                            question: "如何进行环境影响分析",
+                            answer: "环境影响分析（Environmental Impact Assessment, EIA）是一种系统化的程序，用于评估某一特定项目、政策、计划或行动对环境可能产生的影响。这一过程旨在确保环境考虑在决策过程中得到适当的关注，从而减少或避免不利的环境后果。环境影响分析的主要步骤包括筛选（Screening），即确定某一特定项目是否需要进行环境影响分析，通常根据项目的规模、性质和潜在的环境影响来决定；范围界定（Scoping），确定需要重点研究的环境问题和可能受到影响的环境因素，包括分析的地理范围、时间范围和主要环境问题；基线数据收集（Baseline Data Collection），收集项目实施前的环境现状数据，作为未来比较和评估的基础，这些数据通常包括空气、水、土壤、生物多样性、噪音、社会经济等多个方面。通过这些步骤，环境影响分析可以全面评估项目对环境的潜在影响，并提出相应的减缓措施，以确保环境的可持续性发展。"
+                        },
+                    ];
+            
+                    // Function to display chat messages
+                    function displayMessage(message, isUser) {
+                        var chatLog = document.getElementById("chat-log");
+                        var messageClass = isUser ? "user-message" : "ai-message";
+                        var messageElement = document.createElement("div");
+                        messageElement.classList.add(messageClass);
+                        messageElement.textContent = message;
+                        chatLog.appendChild(messageElement);
+                        chatLog.scrollTop = chatLog.scrollHeight;
+                    }
+            
+                    // Function to handle user input
+                    async function handleUserInput() {
+                        var input = document.getElementById("chat-input");
+                        var message = input.value.trim();
+                        if (message === "") return; // Prevent empty messages
+                        displayMessage(message, true);
+                        input.value = "";
+            
+                        // Check if the user input matches any default questions
+                        for (var i = 0; i < defaultQuestions.length; i++) {
+                            var question = defaultQuestions[i].question;
+                            var answer = defaultQuestions[i].answer;
+                            if (message.toLowerCase().includes(question.toLowerCase())) {
+                                displayMessage(answer, false);
+                                return;
+                            }
+                        }
+            
+                        // Call AI API for other questions
+                        var aiResponse = await callAiApi(message);
+                        displayMessage(aiResponse, false);
+                    }
+            
+                    // Function to ask a default question
+                    function askQuestion(index) {
+                        var question = defaultQuestions[index].question;
+                        displayMessage(question, true);
+                        var answer = defaultQuestions[index].answer;
+                        displayMessage(answer, false);
+                    }
+            
+                    // Function to call AI API
+                    async function callAiApi(question) {
+                        const response = await fetch('http://localhost:8000/api/v1/query/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ query: question })
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            return data.answer;
+                        } else {
+                            return "抱歉，我无法回答您的问题。";
+                        }
+                    }
+
+                    // Event listener for send button click
+                    var sendButton = document.getElementById("send-button");
+                    sendButton.addEventListener("click", handleUserInput);
+            
+                    // Event listener for enter key press
+                    var chatInput = document.getElementById("chat-input");
+                    chatInput.addEventListener("keydown", function(event) {
+                        if (event.key === "Enter") {
+                            handleUserInput();
+                        }
+                    });
+                </script>
+                </div>
+            </main>
+            
+        </div>
+    </div>
+</body>
+
+</html>

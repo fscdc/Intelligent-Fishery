@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script src="http://lib.sinaapp.com/js/jquery/2.2.4/jquery-2.2.4.min.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="water" style="width:800px;height:600px"></div>
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var water_data;
+
+    $(document).ready(function () {
+        get_water_data()
+        $.ajax({
+            url: 'https://geo.datav.aliyun.com/areas_v3/bound/330000_full.json',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // 使用JavaScript处理获取的数据
+                console.log(data);
+
+                setSpeciesEcharts(data)
+            }
+        });
+
+    });
+
+
+    function get_water_data() {
+        $.ajax({
+            url: '/fishery/get_water_data/',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // 使用JavaScript处理获取的数据
+                console.log(data);
+                water_data = data;
+
+
+            }
+        });
+    }
+
+    function setSpeciesEcharts(data) {
+        var chartDom = document.getElementById('water');
+        var myChart = echarts.init(chartDom);
+        echarts.registerMap('China', data);
+        var option = {
+            title: {
+                text: '浙江省地图'
+            },
+            tooltip: {
+                triggerOn: "mousemove|click",
+                formatter: function (params) {
+                    console.log(water_data)
+                    console.log(params.name)
+                    var msg = '';
+                    $.each(water_data, function (index, object) {
+                        if (object.address === params.name) {
+                            msg = '<div>监测时间 : ' + object.date + '</div>' +
+                                '<div>水质类别 : ' + object.water_type + '</div>' +
+                                '<div>水温（℃） : ' + object.temperature + '</div>' +
+                                '<div>pH(无量纲) : ' + object.ph + '</div>' +
+                                '<div>溶氧量(mg/L) : ' + object.ry + '</div>' +
+                                '<div>电导率（μS/cm） : ' + object.dd + '</div>' +
+                                '<div>浊度（NTU） : ' + object.zd + '</div>' +
+                                '<div>高锰酸盐指数（mg/L） : ' + object.kmzs + '</div>' +
+                                '<div>氨氮（mg/L） : ' + object.ad + '</div>' +
+                                '<div>总磷（mg/L） : ' + object.zl + '</div>' +
+                                '<div>站点情况 : ' + object.zd + '</div>' +
+                                '<div>地理位置 : ' + object.address + '</div>' +
+                                '<div>天气 : ' + object.weather + '</div>'
+                        }
+
+                    });
+                    return msg;
+                }
+            },
+            series: [
+                {
+                    name: '浙江省地图',
+                    type: 'map',
+                    map: 'China',
+                    label: {
+                        show: true
+                    },
+                    data: []
+                }
+            ]
+        };
+
+
+        option && myChart.setOption(option);
+    }
+
+
+</script>
+</body>
+</html>
