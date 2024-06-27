@@ -53,4 +53,5 @@ urlpatterns = [
     path("fishery/water_list/", water_list, name="water_list"),
     path("fishery/get_water_data/", get_water_data, name="get_water_data"),
     path('', include('chat.urls')),  # 包含 chat 应用的 URLs
+    path('', include('users.urls')),
 ]

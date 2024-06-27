@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "fishery",
     "chat",  # 添加 chat 应用
+    "users",  # 添加 users 应用
 ]
 
 MIDDLEWARE = [
