@@ -9,6 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="{% static 'css/components.chunk.css' %}">
     <link rel="stylesheet" href="{% static 'css/umi.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script src="{% static 'js/echarts.min.js' %}"></script>
 
@@ -16,6 +17,37 @@
     <meta name="theme-color" content="#343a40">
 
     <title>海洋牧场监测可视化系统</title>
+    <style>
+        .highlight {
+            background-color: yellow;
+        }
+        .alert {
+            color: red;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .alert-card {
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            background-color: #f8d7da;
+            padding: 15px;
+            margin-bottom: 10px;
+            color: #721c24;
+        }
+        .alert-card h4 {
+            margin-top: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -121,10 +153,151 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 报警值调整 -->
+                    <div class="block block-rounded js-appear-enabled">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">报警阈值调整</h3>
+                        </div>
+                        <div class="block-content">
+                            <form id="threshold-form">
+                                <div class="form-group">
+                                    <label for="ph-threshold">pH值上限:</label>
+                                    <input type="number" step="0.1" class="form-control" id="ph-threshold" name="ph_threshold" value="8.5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="temp-threshold">温度上限(℃):</label>
+                                    <input type="number" step="0.1" class="form-control" id="temp-threshold" name="temp_threshold" value="25">
+                                </div>
+                                <div class="form-group">
+                                    <label for="oxygen-threshold">溶解氧下限(mg/L):</label>
+                                    <input type="number" step="0.1" class="form-control" id="oxygen-threshold" name="oxygen_threshold" value="5">
+                                </div>
+                                <button type="submit" class="btn btn-primary">保存设置</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 报警信息展示 -->
+                    <div class="block block-rounded js-appear-enabled">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">报警信息</h3>
+                        </div>
+                        <div class="block-content">
+                            <div id="alert-messages"></div>
+                        </div>
+                    </div>
+                    <!-- 数据展示 -->
+                    <div class="block block-rounded js-appear-enabled">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">水质数据</h3>
+                        </div>
+                        <div class="block-content">
+                            <table id="water-data-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>地址</th>
+                                        <th>电导率（μS/cm）</th>
+                                        <th>氨氮（mg/L）</th>
+                                        <th>溶解氧（mg/L）</th>
+                                        <th>高锰酸盐指数（mg/L）</th>
+                                        <th>浊度（NTU）</th>
+                                        <th>总磷（mg/L）</th>
+                                        <th>温度（℃）</th>
+                                        <th>pH</th>
+                                        <th>天气</th>
+                                        <th>站点情况</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            function fetchWaterData() {
+                var thresholds = {
+                    ph_threshold: parseFloat($('#ph-threshold').val()),
+                    temp_threshold: parseFloat($('#temp-threshold').val()),
+                    oxygen_threshold: parseFloat($('#oxygen-threshold').val())
+                };
+    
+                $.ajax({
+                    url: '/fishery/get_water_data/',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: thresholds,
+                    success: function (response) {
+                        console.log("AJAX请求成功，响应数据：", response); // 调试信息
+                        var anomalies = response.anomalies;
+                        var data = response.data;
+                        console.log("提取的异常数据：", anomalies); // 调试信息
+    
+                        if (anomalies.length > 0) {
+                            var alertMessages = anomalies.map(function (record) {
+                                var message = '<div class="alert-card">';
+                                message += '<h4>报警信息</h4>';
+                                message += '<p>检测时间: ' + record.date + '</p>';
+                                message += '<p>地址: ' + record.address + '</p>';
+                                if (record.ph !== undefined) message += '<p>异常pH值: ' + record.ph + '</p>';
+                                if (record.temperature !== undefined) message += '<p>异常温度: ' + record.temperature + '℃</p>';
+                                if (record.ry !== undefined) message += '<p>异常溶氧量: ' + record.ry + 'mg/L</p>';
+                                if (record.ntu !== undefined) message += '<p>异常浊度: ' + record.ntu + ' NTU</p>';
+                                if (record.kmzs !== undefined) message += '<p>异常高锰酸盐指数: ' + record.kmzs + ' mg/L</p>';
+                                if (record.zl !== undefined) message += '<p>异常总磷: ' + record.zl + ' mg/L</p>';
+                                message += '</div>';
+                                return message;
+                            }).join('');
+                            console.log("生成的报警信息：", alertMessages); // 调试信息
+                            $('#alert-messages').html(alertMessages);
+                        } else {
+                            console.log("没有检测到异常数据。"); // 调试信息
+                        }
+    
+                        // 在表格中显示数据
+                        var tableBody = $('#water-data-table tbody');
+                        tableBody.empty();
+                        data.forEach(function (record) {
+                            var row = '<tr>';
+                            row += '<td>' + record.date + '</td>';
+                            row += '<td>' + record.address + '</td>';
+                            row += '<td>' + record.dd + '</td>';
+                            row += '<td>' + record.ad + '</td>';
+                            row += '<td>' + record.ry + '</td>';
+                            row += '<td>' + record.kmzs + '</td>';
+                            row += '<td>' + record.ntu + '</td>';
+                            row += '<td>' + record.zl + '</td>';
+                            row += '<td>' + record.temperature + '</td>';
+                            row += '<td>' + record.ph + '</td>';
+                            row += '<td>' + record.weather + '</td>';
+                            row += '<td>' + record.zdqk + '</td>';
+                            row += '</tr>';
+                            tableBody.append(row);
+                        });
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("AJAX请求失败，错误信息：", textStatus, errorThrown); // 调试信息
+                        $('#alert-messages').html('请求失败: ' + textStatus + ' - ' + errorThrown);
+                    }
+                });
+            }
+    
+            // 初次加载数据
+            fetchWaterData();
+    
+            // 提交阈值表单时重新加载数据
+            $('#threshold-form').submit(function (event) {
+                event.preventDefault();
+                fetchWaterData();
+            });
+        });
+    </script>
+    
+
 </body>
 
 </html>
