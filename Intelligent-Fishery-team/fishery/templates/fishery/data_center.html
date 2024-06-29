@@ -26,19 +26,23 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
         .fish-card img {
             max-width: 600px;
             height: auto;
             border-radius: 5px;
         }
+
         .fish-info {
             margin-top: 15px;
         }
+
         .fish-name {
             font-size: 1.2em;
             margin: 0;
             color: #333;
         }
+
         .fish-description {
             font-size: 1em;
             color: #666;
@@ -47,356 +51,398 @@
 </head>
 
 <body>
-<div id="root">
-    <div id="page-container"
-         class="null sidebar-o sidebar-dark page-header-dark side-scroll page-header-fixed main-content-boxed side-trans-enabled false">
-        <div class="v2board-nav-mask" style="display: none;"></div>
-        <nav id="sidebar">
-            <div class="smini-hidden bg-header-dark">
-                <div class="content-header justify-content-lg-center bg-white-10"><a class="font-size-lg text-white"
-                                                                                     href="/fishery/homepage/"><span
-                        class="text-white-75">海洋牧场</span></a>
-                    <div class="d-lg-none"><a class="text-white ml-2" data-toggle="layout" data-action="sidebar_close"
-                                              href="javascript:void(0);"><i class="fa fa-times-circle"></i></a></div>
+    <div id="root">
+        <div id="page-container"
+            class="null sidebar-o sidebar-dark page-header-dark side-scroll page-header-fixed main-content-boxed side-trans-enabled false">
+            <div class="v2board-nav-mask" style="display: none;"></div>
+            <nav id="sidebar">
+                <div class="smini-hidden bg-header-dark">
+                    <div class="content-header justify-content-lg-center bg-white-10"><a class="font-size-lg text-white"
+                            href="/fishery/homepage/"><span class="text-white-75">海洋牧场</span></a>
+                        <div class="d-lg-none"><a class="text-white ml-2" data-toggle="layout"
+                                data-action="sidebar_close" href="javascript:void(0);"><i
+                                    class="fa fa-times-circle"></i></a></div>
+                    </div>
                 </div>
-            </div>
-            <div class="content-side content-side-full">
-                <ul class="nav-main">
-                    <li class="nav-main-heading">欢迎光临</li>
-                    <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/homepage/"><i
-                            class="nav-main-link-icon si si-book-open"></i><span
-                            class="nav-main-link-name">主页</span></a></li>
-                    <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/main_info/"><i
-                            class="nav-main-link-icon si si-book-open"></i><span
-                            class="nav-main-link-name">主要信息</span></a></li>
-                    {% if user_info.role == 'fisher' or user_info.role == 'general_user' %}
+                <div class="content-side content-side-full">
+                    <ul class="nav-main">
+                        <li class="nav-main-heading">欢迎光临</li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/homepage/"><i
+                                    class="nav-main-link-icon si si-book-open"></i><span
+                                    class="nav-main-link-name">主页</span></a></li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/main_info/"><i
+                                    class="nav-main-link-icon si si-book-open"></i><span
+                                    class="nav-main-link-name">主要信息</span></a></li>
+                        {% if user_info.role == 'fisher' or user_info.role == 'general_user' %}
                         <li class="nav-main-heading">功能</li>
-                    {% endif %}
-                    {% if user_info.role == 'fisher' %}
+                        {% endif %}
+                        {% if user_info.role == 'fisher' %}
                         <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/underwater_system/"><i
-                                class="nav-main-link-icon si si-question"></i><span
-                                class="nav-main-link-name">水下系统</span></a></li>
+                                    class="nav-main-link-icon si si-question"></i><span
+                                    class="nav-main-link-name">水下系统</span></a></li>
                         <li class="nav-main-item"><a class="nav-main-link active" href="/fishery/data_center/"><i
-                                class="nav-main-link-icon si si-question"></i><span
-                                class="nav-main-link-name">数据中心</span></a></li>
-                    {% endif %}
-                    {% if user_info.role == 'fisher' or user_info.role == 'general_user' %}
+                                    class="nav-main-link-icon si si-question"></i><span
+                                    class="nav-main-link-name">数据中心</span></a></li>
+                        {% endif %}
+                        {% if user_info.role == 'fisher' or user_info.role == 'general_user' %}
                         <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/intelligence_center/"><i
-                                class="nav-main-link-icon si si-question"></i><span
-                                class="nav-main-link-name">智能中心</span></a></li>
-                    {% endif %}
-                    {% if user_info.role == 'admin' %}
+                                    class="nav-main-link-icon si si-question"></i><span
+                                    class="nav-main-link-name">智能中心</span></a></li>
+                        {% endif %}
+                        {% if user_info.role == 'admin' %}
                         <li class="nav-main-heading">管理员管理</li>
                         <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/admin_management/"><i
-                                class="nav-main-link-icon si si-book-open"></i><span
-                                class="nav-main-link-name">管理中心</span></a></li>
-                    {% endif %}
-                    <li class="nav-main-heading">用户</li>
-                    <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/user/"><i
-                            class="nav-main-link-icon si si-users"></i><span
-                            class="nav-main-link-name">用户中心</span></a></li>
-                    <li class="nav-main-heading">关于</li>
-                    <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/illustration/"><i
-                            class="nav-main-link-icon si si-book-open"></i><span
-                            class="nav-main-link-name">说明</span></a></li>
-                </ul>
-            </div>
-            <div class="v2board-copyright">海洋牧场监测可视化系统 v1.0.0</div>
-        </nav>
-        <header id="page-header">
-            <div class="content-header">
-                <div class="sidebar-toggle" style="display: none;">
-                    <button type="button" class="btn btn-primary mr-1 d-lg-none"><i class="fa fa-fw fa-bars"></i>
-                    </button>
+                                    class="nav-main-link-icon si si-book-open"></i><span
+                                    class="nav-main-link-name">管理中心</span></a></li>
+                        {% endif %}
+                        <li class="nav-main-heading">用户</li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/user/"><i
+                                    class="nav-main-link-icon si si-users"></i><span
+                                    class="nav-main-link-name">用户中心</span></a></li>
+                        <li class="nav-main-heading">关于</li>
+                        <li class="nav-main-item"><a class="nav-main-link false" href="/fishery/illustration/"><i
+                                    class="nav-main-link-icon si si-book-open"></i><span
+                                    class="nav-main-link-name">说明</span></a></li>
+                    </ul>
                 </div>
-                <div class="v2board-container-title text-white">数据中心</div>
-                <div>
-                    <div class="dropdown d-inline-block">
-                        <button type="button" class="btn btn-primary dropdown-button">
-                            <i class="far fa fa-user-circle"></i>
-                            <span class="d-none d-lg-inline ml-1">{{ user_info.username }}</span>
-                            <i class="fa fa-fw fa-angle-down ml-1"></i>
+                <div class="v2board-copyright">海洋牧场监测可视化系统 v1.0.0</div>
+            </nav>
+            <header id="page-header">
+                <div class="content-header">
+                    <div class="sidebar-toggle" style="display: none;" id="sidebarToggle">
+                        <button type="button" class="btn btn-primary mr-1 d-lg-none"><i class="fa fa-fw fa-bars"></i>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right p-0 false">
-                            <div class="p-2">
-                                <a class="dropdown-item" href="/fishery/user/">
-                                    <i class="far fa-fw fa-user mr-1"></i> 个人中心
-                                </a>
-                                <a class="dropdown-item" href="/fishery/login/">
-                                    <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> 登出
-                                </a>
-                            </div>
-                        </div>
                     </div>
-                </div>
-            </div>
-        </header>
-        <main id="main-container">
-            <div class="content content-full">
-                <!-- Data Overview Section -->
-                <div class="block block-rounded js-appear-enabled">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title">数据中心简介</h3>
-                    </div>
-                    <div class="block-content">
-                        <p>下面的图表展示了当前的海洋数据监测结果</p>
-                    </div>
-                </div>
-                <!-- Data Visualization Section -->
-                <div class="block block-rounded js-appear-enabled">
-                    <div class="block-header block-header-default">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div id="Species" style="width: 500px;height:600px;"></div>
-                            </div>
-                            <div class="col-md-6">
-                                <div id="Weight" style="width: 500px;height:600px;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3 mb-md-0">
-                        <div class="col-12 mb-sm-4">
-                            <div class="block block-rounded js-appear-enabled" style="overflow: hidden;">
-                                <div class="block-content">
-                                    <div id="main-chart" style="width: 100%; height: 400px;"></div>
+                    <div class="v2board-container-title text-white">数据中心</div>
+                    <div>
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn btn-primary dropdown-button">
+                                <i class="far fa fa-user-circle"></i>
+                                <span class="d-none d-lg-inline ml-1">{{ user_info.username }}</span>
+                                <i class="fa fa-fw fa-angle-down ml-1"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right p-0 false">
+                                <div class="p-2">
+                                    <a class="dropdown-item" href="/fishery/user/">
+                                        <i class="far fa-fw fa-user mr-1"></i> 个人中心
+                                    </a>
+                                    <a class="dropdown-item" href="/fishery/login/">
+                                        <i class="far fa-fw fa-arrow-alt-circle-left mr-1"></i> 登出
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <script>
-                        var myChart = echarts.init(document.getElementById('main-chart'));
-                        var option = {
-                            title: { text: '鱼群总数量波动图' },
-                            tooltip: { trigger: 'axis' },
-                            legend: { data: ['鱼群总数量'] },
-                            toolbox: {
-                                show: true,
-                                feature: { saveAsImage: {} }
-                            },
-                            xAxis: {
-                                type: 'category',
-                                boundaryGap: false,
-                                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-                            },
-                            yAxis: {
-                                type: 'value',
-                                axisLabel: { formatter: '{value}' }
-                            },
-                            series: [
-                                {
-                                    name: '鱼群总数量',
-                                    type: 'line',
-                                    data: [204, 212, 194, 208, 194, 194, 177, 189, 226, 210],
-                                    markPoint: {
-                                        data: [
-                                            { type: 'max', name: '最大值' },
-                                            { type: 'min', name: '最小值' }
-                                        ]
-                                    },
-                                    markLine: {
-                                        data: [{ type: 'average', name: '平均值' }]
-                                    }
-                                }
-                            ]
-                        };
-                        myChart.setOption(option);
-                    </script>
                 </div>
+            </header>
+            <script>
+                var sidebarVisible = false;
 
-                <!-- 图表容器 -->
-                <div id="fish-production-chart"></div>
+                document.getElementById('sidebarToggle').addEventListener('click', function (event) {
+                    event.stopPropagation(); // 阻止事件冒泡
+                    var pageContainer = document.getElementById('page-container');
+                    var navMask = document.querySelector('.v2board-nav-mask');
 
-                <!-- JavaScript 代码 -->
-                <!-- <canvas id="dataChart2" width="400" height="10"></canvas> -->
-                <script type="text/javascript">
-                    // 基于准备好的dom，初始化echarts实例
+                    if (sidebarVisible) {
+                        pageContainer.className = "null sidebar-o sidebar-dark page-header-dark side-scroll page-header-fixed main-content-boxed side-trans-enabled false";
+                        navMask.style.display = "none";
+                    } else {
+                        pageContainer.className = "null sidebar-o sidebar-dark page-header-dark side-scroll page-header-fixed main-content-boxed side-trans-enabled sidebar-o-xs";
+                        navMask.style.display = "block";
+                    }
 
-                    var fish_echarts_data = []
-                    var weight_data = []
-                    var x1 = 0
-                    var x2 = 0
-                    var x3 = 0
-                    var x4 = 0
-                    var x5 = 0
-                    $(document).ready(function () {
-                        $.ajax({
-                            url: '/fishery/get_data/',
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function (data) {
-                                // 使用JavaScript处理获取的数据
-                                // {#console.log(data);#}
-                                $.each(data, function (index, object) {
-                                    obj = {}
-                                    obj.value = object.total
-                                    obj.name = object.Species
-                                    // {#console.log(object.Species)#}
-                                    // {#console.log(object.total)#}
-                                    fish_echarts_data.push(obj)
+                    sidebarVisible = !sidebarVisible;
+                });
 
-                                });
+                document.addEventListener('click', function (event) {
+                    if (sidebarVisible) {
+                        var pageContainer = document.getElementById('page-container');
+                        var navMask = document.querySelector('.v2board-nav-mask');
+                        pageContainer.className = "null sidebar-o sidebar-dark page-header-dark side-scroll page-header-fixed main-content-boxed side-trans-enabled false";
+                        navMask.style.display = "none";
+                        sidebarVisible = false;
+                    }
+                });
+            </script>
+            <main id="main-container">
+                <div class="content content-full">
+                    <!-- Data Overview Section -->
+                    <div class="block block-rounded js-appear-enabled">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">数据中心简介</h3>
+                        </div>
+                        <div class="block-content">
+                            <p>下面的图表展示了当前的海洋数据监测结果</p>
+                        </div>
+                    </div>
+                    <!-- Data Visualization Section -->
+                    <div class="block block-rounded js-appear-enabled">
+                        <div class="block-header block-header-default">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="Species" style="width: 500px;height:600px;"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="Weight" style="width: 500px;height:600px;"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                                // {#console.log(fish_echarts_data)#}
-                                setSpeciesEcharts(fish_echarts_data)
-                            }
-                        });
-                        // {# 获取柱状图数据#}
-                        $.ajax({
-                            url: '/fishery/get_weight_data/',
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function (data) {
-                                // 使用JavaScript处理获取的数据
-                                // {#console.log(data);#}
-                                $.each(data, function (index, object) {
-                                    if (object.Weight >= 0 && object.Weight < 400) {
-                                        x1 = x1 + 1
-                                    } else if (object.Weight >= 400 && object.Weight < 800) {
-                                        x2 = x2 + 1
-                                    } else if (object.Weight >= 800 && object.Weight < 1200) {
-                                        x3 = x3 + 1
-                                    } else if (object.Weight >= 1200 && object.Weight < 1600) {
-                                        x4 = x4 + 1
-                                    } else {
-                                        x5 = x5 + 1
-                                    }
-
-                                });
-                                y_data = []
-                                y_data.push(x1, x2, x3, x4, x5)
-                                setWeightEcharts(y_data)
-                                console.log(y_data)
-                            }
-                        });
-                    });
-
-
-                    function setSpeciesEcharts(data) {
-                        var chartDom = document.getElementById('Species');
-                        var myChart = echarts.init(chartDom);
-                        var option;
-                        option = {
-                            title: {
-                                text: '鱼群统计',
-                                // {#subtext: 'Fake Data',#}
-                                left: 'center'
-                            },
-                            tooltip: {
-                                trigger: 'item'
-                            },
-                            legend: {
-                                orient: 'vertical',
-                                left: 'left'
-                            },
-                            series: [
-                                {
-                                    name: '鱼群种类',
-                                    type: 'pie',
-                                    radius: '50%',
-                                    data: data,
-                                    emphasis: {
-                                        itemStyle: {
-                                            shadowBlur: 10,
-                                            shadowOffsetX: 0,
-                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        <div class="row mb-3 mb-md-0">
+                            <div class="col-12 mb-sm-4">
+                                <div class="block block-rounded js-appear-enabled" style="overflow: hidden;">
+                                    <div class="block-content">
+                                        <div id="main-chart" style="width: 100%; height: 400px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            var myChart = echarts.init(document.getElementById('main-chart'));
+                            var option = {
+                                title: { text: '鱼群总数量波动图' },
+                                tooltip: { trigger: 'axis' },
+                                legend: { data: ['鱼群总数量'] },
+                                toolbox: {
+                                    show: true,
+                                    feature: { saveAsImage: {} }
+                                },
+                                xAxis: {
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                                },
+                                yAxis: {
+                                    type: 'value',
+                                    axisLabel: { formatter: '{value}' }
+                                },
+                                series: [
+                                    {
+                                        name: '鱼群总数量',
+                                        type: 'line',
+                                        data: [204, 212, 194, 208, 194, 194, 177, 189, 226, 210],
+                                        markPoint: {
+                                            data: [
+                                                { type: 'max', name: '最大值' },
+                                                { type: 'min', name: '最小值' }
+                                            ]
+                                        },
+                                        markLine: {
+                                            data: [{ type: 'average', name: '平均值' }]
                                         }
                                     }
+                                ]
+                            };
+                            myChart.setOption(option);
+                        </script>
+                    </div>
+
+                    <!-- 图表容器 -->
+                    <div id="fish-production-chart"></div>
+
+                    <!-- JavaScript 代码 -->
+                    <!-- <canvas id="dataChart2" width="400" height="10"></canvas> -->
+                    <script type="text/javascript">
+                        // 基于准备好的dom，初始化echarts实例
+
+                        var fish_echarts_data = []
+                        var weight_data = []
+                        var x1 = 0
+                        var x2 = 0
+                        var x3 = 0
+                        var x4 = 0
+                        var x5 = 0
+                        $(document).ready(function () {
+                            $.ajax({
+                                url: '/fishery/get_data/',
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // 使用JavaScript处理获取的数据
+                                    // {#console.log(data);#}
+                                    $.each(data, function (index, object) {
+                                        obj = {}
+                                        obj.value = object.total
+                                        obj.name = object.Species
+                                        // {#console.log(object.Species)#}
+                                        // {#console.log(object.total)#}
+                                        fish_echarts_data.push(obj)
+
+                                    });
+
+                                    // {#console.log(fish_echarts_data)#}
+                                    setSpeciesEcharts(fish_echarts_data)
                                 }
-                            ]
-                        };
+                            });
+                            // {# 获取柱状图数据#}
+                            $.ajax({
+                                url: '/fishery/get_weight_data/',
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // 使用JavaScript处理获取的数据
+                                    // {#console.log(data);#}
+                                    $.each(data, function (index, object) {
+                                        if (object.Weight >= 0 && object.Weight < 400) {
+                                            x1 = x1 + 1
+                                        } else if (object.Weight >= 400 && object.Weight < 800) {
+                                            x2 = x2 + 1
+                                        } else if (object.Weight >= 800 && object.Weight < 1200) {
+                                            x3 = x3 + 1
+                                        } else if (object.Weight >= 1200 && object.Weight < 1600) {
+                                            x4 = x4 + 1
+                                        } else {
+                                            x5 = x5 + 1
+                                        }
 
-                        option && myChart.setOption(option);
-                    }
-
-                    function setWeightEcharts(data) {
-                        var chartDom = document.getElementById('Weight');
-                        var myChart = echarts.init(chartDom);
-                        var option;
-                        option = {
-                            xAxis: {
-                                type: 'category',
-                                data: ['0-400(g)', '400-800(g)', '800-1200(g)', '1200-1600(g)', '1600-2000(g)'],
-                                // 横坐标：重量范围
-                            },
-                            yAxis: {
-                                type: 'value',
-                                // 纵坐标：数量
-                            },
-                            series: [
-                                {
-                                    data: y_data,
-                                    type: 'bar'
+                                    });
+                                    y_data = []
+                                    y_data.push(x1, x2, x3, x4, x5)
+                                    setWeightEcharts(y_data)
+                                    console.log(y_data)
                                 }
-                            ]
-                        };
+                            });
+                        });
 
-                        option && myChart.setOption(option);
-                    }
 
-                </script>
+                        function setSpeciesEcharts(data) {
+                            var chartDom = document.getElementById('Species');
+                            var myChart = echarts.init(chartDom);
+                            var option;
+                            option = {
+                                title: {
+                                    text: '鱼群统计',
+                                    // {#subtext: 'Fake Data',#}
+                                    left: 'center'
+                                },
+                                tooltip: {
+                                    trigger: 'item'
+                                },
+                                legend: {
+                                    orient: 'vertical',
+                                    left: 'left'
+                                },
+                                series: [
+                                    {
+                                        name: '鱼群种类',
+                                        type: 'pie',
+                                        radius: '50%',
+                                        data: data,
+                                        emphasis: {
+                                            itemStyle: {
+                                                shadowBlur: 10,
+                                                shadowOffsetX: 0,
+                                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                            }
+                                        }
+                                    }
+                                ]
+                            };
 
-            <!-- Fish Display Section -->
-            <div class="block block-rounded js-appear-enabled">
-                <div class="block-header block-header-default">
-                    <h3 class="block-title">鱼类展示</h3>
+                            option && myChart.setOption(option);
+                        }
+
+                        function setWeightEcharts(data) {
+                            var chartDom = document.getElementById('Weight');
+                            var myChart = echarts.init(chartDom);
+                            var option;
+                            option = {
+                                xAxis: {
+                                    type: 'category',
+                                    data: ['0-400(g)', '400-800(g)', '800-1200(g)', '1200-1600(g)', '1600-2000(g)'],
+                                    // 横坐标：重量范围
+                                },
+                                yAxis: {
+                                    type: 'value',
+                                    // 纵坐标：数量
+                                },
+                                series: [
+                                    {
+                                        data: y_data,
+                                        type: 'bar'
+                                    }
+                                ]
+                            };
+
+                            option && myChart.setOption(option);
+                        }
+
+                    </script>
+
+                    <!-- Fish Display Section -->
+                    <div class="block block-rounded js-appear-enabled">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">鱼类展示</h3>
+                        </div>
+                        <div class="block-content">
+                            <!-- TODO: Add fish photos here -->
+                            <div class="fish-card">
+                                <img src="{% static 'images/1.jpg' %}" alt="Bream">
+                                <div class="fish-info">
+                                    <h4 class="fish-name">Bream（鲷鱼）</h4>
+                                    <p class="fish-description">
+                                        鲷鱼是一种广泛分布于世界各地的淡水及咸水鱼类，特征为身体侧扁而稍高，背部灰绿色，腹部银白色。它们通常生活在淡水湖泊和河流中，也有些品种适应于咸水环境。鲷鱼在许多地方都是重要的食用鱼类。
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fish-card">
+                                <img src="{% static 'images/2.png' %}" alt="Roach">
+                                <div class="fish-info">
+                                    <h4 class="fish-name">Roach（鲌）</h4>
+                                    <p class="fish-description">
+                                        鲌是一种小型淡水鱼类，常见于欧洲和亚洲的河流、湖泊中。它们体侧扁，呈银灰色，尾部稍微分叉。鲌属于鲤科，是一种杂食性鱼类，以昆虫、浮游动物和植物为食。</p>
+                                </div>
+                            </div>
+                            <div class="fish-card">
+                                <img src="{% static 'images/3.png' %}" alt="Whitefish">
+                                <div class="fish-info">
+                                    <h4 class="fish-name">Whitefish（白鱼）</h4>
+                                    <p class="fish-description">
+                                        白鱼是一类在北半球广泛分布的淡水鱼类，以其洁白的肉质而闻名。它们体型较大，身体侧扁，背部灰褐色，腹部银白色。白鱼主要以浮游生物和底栖无脊椎动物为食，是重要的商业捕捞对象。
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fish-card">
+                                <img src="{% static 'images/4.png' %}" alt="Parkki">
+                                <div class="fish-info">
+                                    <h4 class="fish-name">Parkki（红眼鲑）</h4>
+                                    <p class="fish-description">
+                                        红眼鲑是一种生活在北欧、东北亚及俄罗斯西部地区的淡水鱼类。它们通常身体略呈椭圆形，背部深灰色至绿色，腹部银白色，眼睛鲜红。红眼鲑主要以昆虫和小型无脊椎动物为食。
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fish-card">
+                                <img src="{% static 'images/5.png' %}" alt="Perch">
+                                <div class="fish-info">
+                                    <h4 class="fish-name">Perch（鲈鱼）</h4>
+                                    <p class="fish-description">
+                                        鲈鱼是一种常见的淡水及咸水鱼类，分布于全球各大洲的水域中。它们身体侧扁，背部深绿色至灰色，腹部银白色，尾鳍分叉。鲈鱼是重要的游钓和商业捕捞鱼类，肉质鲜美。
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fish-card">
+                                <img src="{% static 'images/6.png' %}" alt="Pike">
+                                <div class="fish-info">
+                                    <h4 class="fish-name">Pike（狗鱼）</h4>
+                                    <p class="fish-description">
+                                        狗鱼是一种大型淡水鱼类，分布于欧亚大陆及北美洲的淡水湖泊和河流中。它们身体细长，背部深绿色至暗褐色，具有长长的尖牙，是顶级掠食者。狗鱼以小鱼、青蛙和水鸟等为食。
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fish-card">
+                                <img src="{% static 'images/7.png' %}" alt="Smelt">
+                                <div class="fish-info">
+                                    <h4 class="fish-name">Smelt（银鱼）</h4>
+                                    <p class="fish-description">
+                                        银鱼是一种小型淡水及海水鱼类，分布广泛，主要生活在北半球的淡水和咸水环境中。它们身体细长，呈银灰色，腹部白色，是重要的食用鱼类之一。银鱼以浮游生物为主食。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="block-content">
-                    <!-- TODO: Add fish photos here -->
-                    <div class="fish-card">
-                        <img src="{% static 'images/1.jpg' %}" alt="Bream">
-                        <div class="fish-info">
-                            <h4 class="fish-name">Bream（鲷鱼）</h4>
-                            <p class="fish-description">鲷鱼是一种广泛分布于世界各地的淡水及咸水鱼类，特征为身体侧扁而稍高，背部灰绿色，腹部银白色。它们通常生活在淡水湖泊和河流中，也有些品种适应于咸水环境。鲷鱼在许多地方都是重要的食用鱼类。</p>
-                        </div>
-                    </div>
-                    <div class="fish-card">
-                        <img src="{% static 'images/2.png' %}" alt="Roach">
-                        <div class="fish-info">
-                            <h4 class="fish-name">Roach（鲌）</h4>
-                            <p class="fish-description">鲌是一种小型淡水鱼类，常见于欧洲和亚洲的河流、湖泊中。它们体侧扁，呈银灰色，尾部稍微分叉。鲌属于鲤科，是一种杂食性鱼类，以昆虫、浮游动物和植物为食。</p>
-                        </div>
-                    </div>
-                    <div class="fish-card">
-                        <img src="{% static 'images/3.png' %}" alt="Whitefish">
-                        <div class="fish-info">
-                            <h4 class="fish-name">Whitefish（白鱼）</h4>
-                            <p class="fish-description">白鱼是一类在北半球广泛分布的淡水鱼类，以其洁白的肉质而闻名。它们体型较大，身体侧扁，背部灰褐色，腹部银白色。白鱼主要以浮游生物和底栖无脊椎动物为食，是重要的商业捕捞对象。</p>
-                        </div>
-                    </div>
-                    <div class="fish-card">
-                        <img src="{% static 'images/4.png' %}" alt="Parkki">
-                        <div class="fish-info">
-                            <h4 class="fish-name">Parkki（红眼鲑）</h4>
-                            <p class="fish-description">红眼鲑是一种生活在北欧、东北亚及俄罗斯西部地区的淡水鱼类。它们通常身体略呈椭圆形，背部深灰色至绿色，腹部银白色，眼睛鲜红。红眼鲑主要以昆虫和小型无脊椎动物为食。</p>
-                        </div>
-                    </div>
-                    <div class="fish-card">
-                        <img src="{% static 'images/5.png' %}" alt="Perch">
-                        <div class="fish-info">
-                            <h4 class="fish-name">Perch（鲈鱼）</h4>
-                            <p class="fish-description">鲈鱼是一种常见的淡水及咸水鱼类，分布于全球各大洲的水域中。它们身体侧扁，背部深绿色至灰色，腹部银白色，尾鳍分叉。鲈鱼是重要的游钓和商业捕捞鱼类，肉质鲜美。</p>
-                        </div>
-                    </div>
-                    <div class="fish-card">
-                        <img src="{% static 'images/6.png' %}" alt="Pike">
-                        <div class="fish-info">
-                            <h4 class="fish-name">Pike（狗鱼）</h4>
-                            <p class="fish-description">狗鱼是一种大型淡水鱼类，分布于欧亚大陆及北美洲的淡水湖泊和河流中。它们身体细长，背部深绿色至暗褐色，具有长长的尖牙，是顶级掠食者。狗鱼以小鱼、青蛙和水鸟等为食。</p>
-                        </div>
-                    </div>
-                    <div class="fish-card">
-                        <img src="{% static 'images/7.png' %}" alt="Smelt">
-                        <div class="fish-info">
-                            <h4 class="fish-name">Smelt（银鱼）</h4>
-                            <p class="fish-description">银鱼是一种小型淡水及海水鱼类，分布广泛，主要生活在北半球的淡水和咸水环境中。它们身体细长，呈银灰色，腹部白色，是重要的食用鱼类之一。银鱼以浮游生物为主食。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                
-            </div>
-            <!-- Data Reports Section
+                <!-- Data Reports Section
             <div class="block block-rounded js-appear-enabled">
                 <div class="block-header block-header-default">
                     <h3 class="block-title">数据报告</h3>
@@ -406,11 +452,11 @@
                 </div>
             </div> -->
         </div>
-    </main>
+        </main>
 
 
-</div>
-</div>
+    </div>
+    </div>
 </body>
 
 </html>
