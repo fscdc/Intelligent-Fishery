@@ -13,16 +13,17 @@ def check_for_anomalies(data, ph_threshold, temp_threshold, oxygen_threshold):
         anomaly = False
         if ph > ph_threshold:
             anomaly = True
-            record['ph_anomaly'] = True
+            record['ph_anomaly'] = ph
         if temperature > temp_threshold:
             anomaly = True
-            record['temp_anomaly'] = True
+            record['temperature_anomaly'] = temperature
         if ry < oxygen_threshold:
             anomaly = True
-            record['ry_anomaly'] = True
+            record['ry_anomaly'] = ry
         if anomaly:
             anomalies.append(record)
     return anomalies
+
 
 @csrf_exempt
 def get_data(request):
